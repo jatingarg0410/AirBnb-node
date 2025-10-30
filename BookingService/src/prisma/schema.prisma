@@ -27,10 +27,10 @@ idempotencyKey    IdempotencyKey?
 
 model IdempotencyKey {
   id  Int  @id @default(autoincrement())
-  key String @unique
+  idemKey String @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-   bookingId  Int? @unique
+   bookingId  Int @unique
    booking    Booking? @relation(fields: [bookingId], references: [id])
   finalized Boolean @default(false)
 
