@@ -3,6 +3,9 @@ import { getRedisConnObject } from "../config/redis.config";
 import { MAILER_QUEUE } from "../queues/mailer.queue";
 import { NotificationDto } from "../dto/notification.dto";
 import { MAILER_PAYLOAD } from "../producers/email.producer";
+import logger from "../config/logger.config";
+import { sendEmail } from "../services/mailer.service";
+import { renderMailTemplate } from "../templates/templates.handler";
 
 
 export const setupMailerWorker = () => {
@@ -12,8 +15,19 @@ const emailProcessor = new Worker<NotificationDto>(
     if (job.name !== MAILER_PAYLOAD) {
       throw new Error('Invalid job name')
     }
+            const payload = job.data
+            console.log(`Processing email for: ${JSON.stringify(payload)}`)
 
-    console.log(`Processing job ${job.name} with data ${JSON.stringify(job.data)}`);
+            const emailContent = await renderMailTemplate(
+              payload.templateId,
+              payload.params
+            )
+
+            await sendEmail(payload.to, payload.subject, emailContent)
+
+            logger.info(
+              `Email sent to ${payload.to} with subject "${payload.subject}"`
+            )
     //Call the service layer from here
   },
   {
