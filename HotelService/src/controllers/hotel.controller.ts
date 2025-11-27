@@ -5,8 +5,10 @@ import {
   getAllHotelsService,
   getHotelByIdService,
   updateHotelService,
+  searchHotelsService,
 } from '../services/hotel.service'
 import { StatusCodes } from 'http-status-codes'
+import { HotelFilterDTO } from '../dtos/hotel.filter.dto'
 
 export async function createHotelHandler(
   req: Request,
@@ -52,6 +54,39 @@ export async function getAllHotelsHandler(
   // 1. Call the service layer
 
   const hotelsResponse = await getAllHotelsService()
+
+  // 2. Send the response
+  res.status(StatusCodes.OK).json({
+    message: 'Hotels found successfully',
+    data: hotelsResponse,
+    success: true,
+  })
+}
+
+export async function searchHotelsHandler(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  // 1. Call the service layer
+  const filters: HotelFilterDTO = {
+    location: req.query.location as string,
+    minPrice: req.query.minPrice ? Number(req.query.minPrice) : undefined,
+    maxPrice: req.query.maxPrice ? Number(req.query.maxPrice) : undefined,
+    page: req.query.page ? Number(req.query.page) : 1,
+    limit: req.query.limit ? Number(req.query.limit) : 10,
+  }
+
+  const hotelsResponse = await searchHotelsService(filters)
+
+  if (hotelsResponse.hotels.length === 0) {
+    res.status(StatusCodes.OK).json({
+      message: 'No hotels found with the given filters',
+      data: hotelsResponse,
+      success: true,
+    })
+    return
+  }
 
   // 2. Send the response
   res.status(StatusCodes.OK).json({

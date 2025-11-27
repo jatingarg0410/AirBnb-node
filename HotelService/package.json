@@ -1,17 +1,18 @@
 {
-  "name": "expresstypescripttemplate",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
+  
+"name": "@airbnb/hotel-service",
+"version": "1.0.0",
+"main": "index.js",
+"scripts": {
     "start": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts",
     "migrate": "npx sequelize-cli db:migrate",
     "rollback": "npx sequelize-cli db:undo"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["airbnb", "hotels", "microservice"],
+  "author": "Jatin Garg",
   "license": "ISC",
-  "description": "",
+  "description": "Hotel management microservice for Airbnb platform",
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
