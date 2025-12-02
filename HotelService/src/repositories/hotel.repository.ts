@@ -1,5 +1,5 @@
 import logger from "../config/logger.config";
-import Hotel from "../db/models/hotel";
+import Hotel from "../db/models/hotel"; 
 import Room from "../db/models/room";
 import { NotFoundError } from "../utils/errors/app.error";
 import BaseRepository from "./base.repository";
