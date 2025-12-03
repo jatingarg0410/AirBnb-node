@@ -19,14 +19,12 @@ type Config struct{
 
 type Application struct{
 Config Config
-Store db.Storage
 }
 
 //Constructor for Application
 func NewApplication(config Config) *Application{
 	return &Application{
 		Config: config,
-		Store: *db.NewStorage(),
 	}
 }
 
